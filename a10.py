@@ -114,7 +114,7 @@ def get_birth_date(name: str) -> str:
         birth date of the given person
     """
     infobox_text = clean_text(get_first_infobox_text(get_page_html(name)))
-    print(infobox_text)
+    #print(infobox_text)
     pattern = r"(?:Born|Date of birth.*).*[\d(*](?P<birth>\d{4}-\d{2}-\d{2})"
     error_text = (
         "Page infobox has no birth information (at least none in xxxx-xx-xx format)"
@@ -128,14 +128,28 @@ def get_elected(name: str) -> str:
 
     """
     infobox_text = clean_text(get_first_infobox_text(get_page_html(name)))
-    print(infobox_text)
-    pattern = r"In office(?P<elected>\w+ /d+, /d+)"
+    #print(infobox_text)
+    pattern = r"States*In office(?P<elected>\w+ \d+, \d+)"
     error_text = (
         "Page infobox has no election information"
     )
     match = get_match(infobox_text, pattern, error_text)
 
     return match.group("elected")
+
+def get_anthem(name: str) -> str:
+    """gives the national anthem of a country
+
+    """
+    infobox_text = clean_text(get_first_infobox_text(get_page_html(name)))
+    #print(infobox_text)
+    pattern = r"Anthem: .*(?P<anthem>\".*\")"
+    error_text = (
+        "Page infobox has no anthem information"
+    )
+    match = get_match(infobox_text, pattern, error_text)
+
+    return match.group("anthem")
 
 # below are a set of actions. Each takes a list argument and returns a list of answers
 # according to the action and the argument. It is important that each function returns a
@@ -168,6 +182,11 @@ def polar_radius(matches: List[str]) -> List[str]:
 def elected(matches: List[str]) -> List[str]:
     return [get_elected(" ".join(matches))]
 
+def anthem(matches: List[str]) -> List[str]:
+    return [get_anthem(" ".join(matches))]
+
+
+
 # dummy argument is ignored and doesn't matter
 def bye_action(dummy: List[str]) -> None:
     raise KeyboardInterrupt
@@ -184,6 +203,7 @@ pa_list: List[Tuple[Pattern, Action]] = [
     ("when was % born".split(), birth_date),
     ("what is the polar radius of %".split(), polar_radius),
     ("when was % elected".split(), elected),
+    ("what is the national anthem of %".split(), anthem),
     (["bye"], bye_action),
 ]
 
