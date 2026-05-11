@@ -151,6 +151,17 @@ def get_anthem(name: str) -> str:
 
     return match.group("anthem")
 
+def get_game_publisher(name: str) -> str:
+    infobox_text = clean_text(get_first_infobox_text(get_page_html(name)))
+    #print(infobox_text)
+    pattern = r"(?:Publisher)s*\w(?P<publisher>.*?)(?:Director)"
+    error_text = (
+        "Page infobox has no game publisher information "
+    )
+    match = get_match(infobox_text, pattern, error_text)
+
+    return match.group("publisher")
+
 # below are a set of actions. Each takes a list argument and returns a list of answers
 # according to the action and the argument. It is important that each function returns a
 # list of the answer(s) and not just the answer itself.
@@ -185,6 +196,9 @@ def elected(matches: List[str]) -> List[str]:
 def anthem(matches: List[str]) -> List[str]:
     return [get_anthem(" ".join(matches))]
 
+def game_publisher(matches: List[str]) -> List[str]:
+    return [get_game_publisher(" ".join(matches))]
+
 
 
 # dummy argument is ignored and doesn't matter
@@ -204,6 +218,7 @@ pa_list: List[Tuple[Pattern, Action]] = [
     ("what is the polar radius of %".split(), polar_radius),
     ("when was % elected".split(), elected),
     ("what is the national anthem of %".split(), anthem),
+    ("who published %".split(), game_publisher),
     (["bye"], bye_action),
 ]
 
