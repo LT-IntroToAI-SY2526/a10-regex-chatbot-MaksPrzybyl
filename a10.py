@@ -154,7 +154,7 @@ def get_anthem(name: str) -> str:
 def get_game_publisher(name: str) -> str:
     infobox_text = clean_text(get_first_infobox_text(get_page_html(name)))
     #print(infobox_text)
-    pattern = r"(?:Publisher)s*\w(?P<publisher>.*?)(?:Director)"
+    pattern = r"(?:Publisher)(?P<publisher>.*?)(?:Director)"
     error_text = (
         "Page infobox has no game publisher information "
     )
