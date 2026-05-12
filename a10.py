@@ -129,7 +129,7 @@ def get_elected(name: str) -> str:
     """
     infobox_text = clean_text(get_first_infobox_text(get_page_html(name)))
     #print(infobox_text)
-    pattern = r"States*In office(?P<elected>\w+ \d+, \d+)"
+    pattern = r"(?:In office|Assumed office) *(?P<elected>\w+ \d+, \d+)"
     error_text = (
         "Page infobox has no election information"
     )
