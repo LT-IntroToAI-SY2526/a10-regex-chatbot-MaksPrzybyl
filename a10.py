@@ -154,33 +154,33 @@ def get_anthem(name: str) -> str:
 def get_game_publisher(name: str) -> str:
     infobox_text = clean_text(get_first_infobox_text(get_page_html(name)))
     #print(infobox_text)
-    pattern = r"(?:Publisher)(?P<publisher>.*?)(?:Director)"
+    pattern = r"Publisher(?:s)?(?P<publisher>.*?)(?:Director)"
     error_text = (
         "Page infobox has no game publisher information "
     )
     match = get_match(infobox_text, pattern, error_text)
 
     return match.group("publisher")
-def get_author(name: str) -> str:
-    """gives the author of a book
+def get_publishing_date(name: str) -> str:
+    """gives the publishing date of a book
 
     """
     infobox_text = clean_text(get_first_infobox_text(get_page_html(name)))
-    #whprint(infobox_text)
-    pattern = r"Author(?P<author>.*)(?:Language|Illustrator)Audio*"
+    #print(infobox_text)
+    pattern = r"(Published|Publication date)(?P<publishing_date>\d* *\w+ \d+,* *\d*)"
     error_text = (
-        "Page infobox has no author information"
+        "Page infobox has no publishing information"
     )
     match = get_match(infobox_text, pattern, error_text)
 
-    return match.group("author")
+    return match.group("publishing_date")
 def get_language(name: str) -> str:
-    """gives the languge
+    """gives the official langauge of a country
 
     """
     infobox_text = clean_text(get_first_infobox_text(get_page_html(name)))
-    print(infobox_text)
-    pattern = r"Language(?P<language>\w+)"
+    #print(infobox_text)
+    pattern = r"language(?:s)?(?P<language>.*)Ethnic"
     error_text = (
         "Page infobox has no language information"
     )
@@ -223,8 +223,8 @@ def anthem(matches: List[str]) -> List[str]:
 
 def game_publisher(matches: List[str]) -> List[str]:
     return [get_game_publisher(" ".join(matches))]
-def author(matches: List[str]) -> List[str]:
-    return [get_author(" ".join(matches))]
+def publishing_date(matches: List[str]) -> List[str]:
+    return [get_publishing_date(" ".join(matches))]
 def language(matches: List[str]) -> List[str]:
     return [get_language(" ".join(matches))]
 
@@ -246,7 +246,7 @@ pa_list: List[Tuple[Pattern, Action]] = [
     ("when was % elected".split(), elected),
     ("what is the national anthem of %".split(), anthem),
     ("who published %".split(), game_publisher),
-    ("who wrote %".split(), author),
+    ("when was % published".split(), publishing_date),
     ("language of %".split(), language),
     (["bye"], bye_action),
 ]
