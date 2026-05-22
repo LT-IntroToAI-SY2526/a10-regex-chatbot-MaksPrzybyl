@@ -179,14 +179,29 @@ def get_language(name: str) -> str:
 
     """
     infobox_text = clean_text(get_first_infobox_text(get_page_html(name)))
-    print(infobox_text)
-    pattern = r"language[s]*(?P<language>(?:S)*.*)Ethnic"
+    #print(infobox_text)
+    pattern = r"language(?P<language>(?:S)*.*)Ethnic"
     error_text = (
         "Page infobox has no language information"
     )
     match = get_match(infobox_text, pattern, error_text)
 
     return match.group("language")
+def get_capital(name: str) -> str:
+    """gives the official langauge of a country
+
+    """
+    infobox_text = clean_text(get_first_infobox_text(get_page_html(name)))
+    #print(infobox_text)
+    pattern = r"(Capitaland largest city|Capital)(?P<capital>[A-Za-z]+[A-Za-z]*[A-Za-z]*)"
+    error_text = (
+        "Page infobox has no capital information"
+    )
+    match = get_match(infobox_text, pattern, error_text)
+
+    return match.group("capital")
+
+#composer next?
 # below are a set of actions. Each takes a list argument and returns a list of answers
 # according to the action and the argument. It is important that each function returns a
 # list of the answer(s) and not just the answer itself.
@@ -227,7 +242,8 @@ def publishing_date(matches: List[str]) -> List[str]:
     return [get_publishing_date(" ".join(matches))]
 def language(matches: List[str]) -> List[str]:
     return [get_language(" ".join(matches))]
-
+def capital(matches: List[str]) -> List[str]:
+    return [get_capital(" ".join(matches))]
 # dummy argument is ignored and doesn't matter
 def bye_action(dummy: List[str]) -> None:
     raise KeyboardInterrupt
@@ -248,6 +264,7 @@ pa_list: List[Tuple[Pattern, Action]] = [
     ("who published %".split(), game_publisher),
     ("when was % published".split(), publishing_date),
     ("language of %".split(), language),
+    ("capital of %".split(), capital),
     (["bye"], bye_action),
 ]
 
