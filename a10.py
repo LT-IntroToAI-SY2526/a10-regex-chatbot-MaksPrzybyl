@@ -179,8 +179,8 @@ def get_language(name: str) -> str:
 
     """
     infobox_text = clean_text(get_first_infobox_text(get_page_html(name)))
-    #print(infobox_text)
-    pattern = r"language(?:s)?(?P<language>.*)Ethnic"
+    print(infobox_text)
+    pattern = r"language[s]*(?P<language>(?:S)*.*)Ethnic"
     error_text = (
         "Page infobox has no language information"
     )
