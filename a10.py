@@ -200,7 +200,32 @@ def get_capital(name: str) -> str:
     match = get_match(infobox_text, pattern, error_text)
 
     return match.group("capital")
+def get_coin(name: str) -> str:
+    """gives value of coin
 
+    """
+    infobox_text = clean_text(get_first_infobox_text(get_page_html(name)))
+    #print(infobox_text)
+    pattern = r"Value(?P<coin>.*)Mass"
+    error_text = (
+        "Page infobox has no value information"
+    )
+    match = get_match(infobox_text, pattern, error_text)
+
+    return match.group("coin")
+def get_box_office(name: str) -> str:
+    """gives box office of a movie
+
+    """
+    infobox_text = clean_text(get_first_infobox_text(get_page_html(name)))
+    #print(infobox_text)
+    pattern = r"office(?P<box_office>[$].*)[[]"
+    error_text = (
+        "Page infobox has no value information"
+    )
+    match = get_match(infobox_text, pattern, error_text)
+
+    return match.group("box_office")
 #composer next?
 # below are a set of actions. Each takes a list argument and returns a list of answers
 # according to the action and the argument. It is important that each function returns a
@@ -244,6 +269,10 @@ def language(matches: List[str]) -> List[str]:
     return [get_language(" ".join(matches))]
 def capital(matches: List[str]) -> List[str]:
     return [get_capital(" ".join(matches))]
+def coin(matches: List[str]) -> List[str]:
+    return [get_coin(" ".join(matches))]
+def box_office(matches: List[str]) -> List[str]:
+    return [get_box_office(" ".join(matches))]
 # dummy argument is ignored and doesn't matter
 def bye_action(dummy: List[str]) -> None:
     raise KeyboardInterrupt
@@ -265,6 +294,8 @@ pa_list: List[Tuple[Pattern, Action]] = [
     ("when was % published".split(), publishing_date),
     ("language of %".split(), language),
     ("capital of %".split(), capital),
+    ("value of the %".split(), coin),
+    ("box office of %".split(), box_office),
     (["bye"], bye_action),
 ]
 
