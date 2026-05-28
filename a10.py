@@ -153,7 +153,7 @@ def get_anthem(name: str) -> str:
 
 def get_game_publisher(name: str) -> str:
     infobox_text = clean_text(get_first_infobox_text(get_page_html(name)))
-    #print(infobox_text)
+    print(infobox_text)
     pattern = r"Publisher(?:s)?(?P<publisher>.*?)(?:Director)"
     error_text = (
         "Page infobox has no game publisher information "
@@ -265,6 +265,8 @@ def get_distributor(name: str) -> str:
     match = get_match(infobox_text, pattern, error_text)
 
     return match.group("distributor")
+
+# regex for tommorow(?:Modes|Mode)(?P<mode>Single*-*player*,* *multiplayer*)
     
 #composer next?
 # below are a set of actions. Each takes a list argument and returns a list of answers
