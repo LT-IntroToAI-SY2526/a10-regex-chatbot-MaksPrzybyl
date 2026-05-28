@@ -252,6 +252,19 @@ def get_runtime(name: str) -> str:
     match = get_match(infobox_text, pattern, error_text)
 
     return match.group("runtime")
+def get_distributor(name: str) -> str:
+    """gives distributor of a movie
+
+    """
+    infobox_text = clean_text(get_first_infobox_text(get_page_html(name)))
+    #print(infobox_text)
+    pattern = r"Distributed by(?P<distributor>.*)Release"
+    error_text = (
+        "Page infobox has no value information"
+    )
+    match = get_match(infobox_text, pattern, error_text)
+
+    return match.group("distributor")
     
 #composer next?
 # below are a set of actions. Each takes a list argument and returns a list of answers
@@ -304,6 +317,8 @@ def budget(matches: List[str]) -> List[str]:
     return [get_budget(" ".join(matches))]
 def runtime(matches: List[str]) -> List[str]:
     return [get_runtime(" ".join(matches))]
+def distributor(matches: List[str]) -> List[str]:
+    return [get_distributor(" ".join(matches))]
 
 
 # dummy argument is ignored and doesn't matter
@@ -331,6 +346,7 @@ pa_list: List[Tuple[Pattern, Action]] = [
     ("box office of %".split(), box_office),
     ("budget of %".split(), budget),
     ("how long is %".split(), runtime),
+    ("who distributed %".split(), distributor),
     (["bye"], bye_action),
 ]
 
