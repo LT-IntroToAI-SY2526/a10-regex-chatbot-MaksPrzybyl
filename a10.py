@@ -226,6 +226,33 @@ def get_box_office(name: str) -> str:
     match = get_match(infobox_text, pattern, error_text)
 
     return match.group("box_office")
+def get_budget(name: str) -> str:
+    """gives budget of a movie
+
+    """
+    infobox_text = clean_text(get_first_infobox_text(get_page_html(name)))
+    #print(infobox_text)
+    pattern = r"Budget(?P<budget>[$]\d+ *\d*,*[.]* *million*)"
+    error_text = (
+        "Page infobox has no value information"
+    )
+    match = get_match(infobox_text, pattern, error_text)
+
+    return match.group("budget")
+def get_runtime(name: str) -> str:
+    """gives runtime of a movie
+
+    """
+    infobox_text = clean_text(get_first_infobox_text(get_page_html(name)))
+    #print(infobox_text)
+    pattern = r"time(?P<runtime>\d+ minutes)"
+    error_text = (
+        "Page infobox has no value information"
+    )
+    match = get_match(infobox_text, pattern, error_text)
+
+    return match.group("runtime")
+    
 #composer next?
 # below are a set of actions. Each takes a list argument and returns a list of answers
 # according to the action and the argument. It is important that each function returns a
@@ -273,6 +300,12 @@ def coin(matches: List[str]) -> List[str]:
     return [get_coin(" ".join(matches))]
 def box_office(matches: List[str]) -> List[str]:
     return [get_box_office(" ".join(matches))]
+def budget(matches: List[str]) -> List[str]:
+    return [get_budget(" ".join(matches))]
+def runtime(matches: List[str]) -> List[str]:
+    return [get_runtime(" ".join(matches))]
+
+
 # dummy argument is ignored and doesn't matter
 def bye_action(dummy: List[str]) -> None:
     raise KeyboardInterrupt
@@ -296,6 +329,8 @@ pa_list: List[Tuple[Pattern, Action]] = [
     ("capital of %".split(), capital),
     ("value of the %".split(), coin),
     ("box office of %".split(), box_office),
+    ("budget of %".split(), budget),
+    ("how long is %".split(), runtime),
     (["bye"], bye_action),
 ]
 
