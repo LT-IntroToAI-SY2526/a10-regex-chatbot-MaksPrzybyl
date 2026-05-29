@@ -153,7 +153,7 @@ def get_anthem(name: str) -> str:
 
 def get_game_publisher(name: str) -> str:
     infobox_text = clean_text(get_first_infobox_text(get_page_html(name)))
-    print(infobox_text)
+    #print(infobox_text)
     pattern = r"Publisher(?:s)?(?P<publisher>.*?)(?:Director)"
     error_text = (
         "Page infobox has no game publisher information "
@@ -265,8 +265,19 @@ def get_distributor(name: str) -> str:
     match = get_match(infobox_text, pattern, error_text)
 
     return match.group("distributor")
+def get_gamemode(name: str) -> str:
+    """gives mode(s) of a game
 
-# regex for tommorow(?:Modes|Mode)(?P<mode>Single*-*player*,* *multiplayer*)
+    """
+    infobox_text = clean_text(get_first_infobox_text(get_page_html(name)))
+    #hprint(infobox_text)
+    pattern = r"(?:Modes|Mode)(?P<gamemode>[Single]*[-]*[player]*[, multiplayer]*[Multiplayer]*)"
+    error_text = (
+        "Page infobox has no gamemode information"
+    )
+    match = get_match(infobox_text, pattern, error_text)
+
+    return match.group("gamemode")
     
 #composer next?
 # below are a set of actions. Each takes a list argument and returns a list of answers
@@ -321,6 +332,8 @@ def runtime(matches: List[str]) -> List[str]:
     return [get_runtime(" ".join(matches))]
 def distributor(matches: List[str]) -> List[str]:
     return [get_distributor(" ".join(matches))]
+def gamemode(matches: List[str]) -> List[str]:
+    return [get_gamemode(" ".join(matches))]
 
 
 # dummy argument is ignored and doesn't matter
@@ -349,6 +362,7 @@ pa_list: List[Tuple[Pattern, Action]] = [
     ("budget of %".split(), budget),
     ("how long is %".split(), runtime),
     ("who distributed %".split(), distributor),
+    ("how can you play %".split(), gamemode),
     (["bye"], bye_action),
 ]
 
